@@ -17,7 +17,7 @@ public class DottedProgressView extends View {
     private static final String TAG = "DottedProgressView";
     private int mCount;
     private int mCurrent = 1;
-    private boolean mShowDots = false;
+    private boolean mShowDots = true;
 
     private Paint mCompletedPaint = new Paint();
     private Paint mLeftPaint = new Paint();
