@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="DottedProgressView">
+        <attr name="completedColor" format="color" />
+        <attr name="leftColor" format="color" />
+    </declare-styleable>
+</resources>

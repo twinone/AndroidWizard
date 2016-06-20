@@ -1,0 +1,15 @@
+<resources>
+
+
+    <style name="WizardBaseTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorAccent">#FF4CAF50</item>
+        <item name="colorPrimary">#FF4CAF50</item>
+        <item name="colorPrimaryDark">#FF4CAF50</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="buttonTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="WizardPagerTheme" parent="WizardBaseTheme"></style>
+
+
+</resources>
