@@ -17,6 +17,7 @@ public class DottedProgressView extends View {
     private static final String TAG = "DottedProgressView";
     private int mCount;
     private int mCurrent = 1;
+    private boolean mShowDots = false;
 
     private Paint mCompletedPaint = new Paint();
     private Paint mLeftPaint = new Paint();
@@ -86,6 +87,10 @@ public class DottedProgressView extends View {
         setCurrent(mCurrent - 1);
     }
 
+    public void setShowDots(boolean showDots) {
+        mShowDots = showDots;
+    }
+
     public void setCompletedColor(int color) {
         mCompletedPaint.setColor(color);
         invalidate();
@@ -114,16 +119,25 @@ public class DottedProgressView extends View {
         int w = getWidth();
         int h = getHeight();
         int r = h / 2;
-        int step = (int) ((float) (w - 2 * r) / (mCount - 1));
+        if (mShowDots) {
+            int step = (int) ((float) (w - 2 * r) / (mCount - 1));
 
-        int split = r + mCurrent * step - step / 2;
-        split = Math.min(Math.max(r, split), w - r);
+            int split = r + mCurrent * step - step / 2;
+            split = Math.min(Math.max(r, split), w - r);
 
-        canvas.drawLine(r, r, split, r, mCompletedPaint);
-        canvas.drawLine(split, r, w - r, r, mLeftPaint);
+            canvas.drawLine(r, r, split, r, mCompletedPaint);
+            canvas.drawLine(split, r, w - r, r, mLeftPaint);
 
-        for (int i = 0; i < mCount; i++) {
-            canvas.drawCircle(r + step * i, r, r, i < mCurrent ? mCompletedPaint : mLeftPaint);
+            for (int i = 0; i < mCount; i++) {
+                canvas.drawCircle(r + step * i, r, r, i < mCurrent ? mCompletedPaint : mLeftPaint);
+            }
+        } else {
+            int step = (int) (w / (float) (mCount));
+            int split = step * mCurrent;
+            split = Math.min(Math.max(0, split), w);
+
+            canvas.drawLine(0, r, split, r, mCompletedPaint);
+            canvas.drawLine(split, r, w, r, mLeftPaint);
         }
     }
 

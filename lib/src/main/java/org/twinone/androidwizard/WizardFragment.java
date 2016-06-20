@@ -20,6 +20,7 @@ public class WizardFragment extends Fragment {
     public static final int NEXT = 2;
 
     private int mComesFrom = BACK;
+    private String mTitle;
 
     @Override
     public void onAttach(Context context) {
@@ -29,11 +30,6 @@ public class WizardFragment extends Fragment {
             throw new IllegalStateException("WizardFragment should be added to a WizardActivity");
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setTitle(getTitle());
-    }
 
     protected WizardActivity getWizardActivity() {
         return (WizardActivity) getActivity();
@@ -48,19 +44,16 @@ public class WizardFragment extends Fragment {
     }
 
     protected void setTitle(String title) {
+        mTitle = title;
         getWizardActivity().getToolbar().setTitle(title);
     }
 
     protected void setTitle(int titleResId) {
         setTitle(getString(titleResId));
     }
-
-    protected String getTitle() {
-        return getString(getTitleResId());
-    }
-
-    protected int getTitleResId() {
-        return 0;
+    
+    public String getTitle() {
+        return mTitle;
     }
 
     public void setComesFrom(int from) {

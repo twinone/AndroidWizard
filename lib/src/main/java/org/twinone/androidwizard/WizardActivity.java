@@ -204,7 +204,6 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         mPrev.setImageResource(getSelectedPage() == 0
                 ? R.drawable.ic_close_white_24dp
                 : R.drawable.ic_arrow_back_white_24dp);
-        //setCanGoBack(getSelectedPage() != 0);
 
         setCanGoBack(mDefaultCanGoBack);
         setCanGoNext(mDefaultCanGoNext);
@@ -217,6 +216,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
             }
         }
     }
+
 
     protected void setDefaultCanGoBack(boolean defaultCanGoBack) {
         mDefaultCanGoBack = defaultCanGoBack;
@@ -307,6 +307,10 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
     public static boolean shouldShowWizard(Context c, String key) {
         return getPrefs(c).getBoolean(key, true);
+    }
+
+    public void setShowDots(boolean showDots) {
+        mProgress.setShowDots(showDots);
     }
 
     /**
