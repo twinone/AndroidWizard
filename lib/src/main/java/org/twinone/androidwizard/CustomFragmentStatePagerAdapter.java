@@ -6,10 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Luuk W. (Twinone).
@@ -73,6 +76,12 @@ public abstract class CustomFragmentStatePagerAdapter extends PagerAdapter {
     }
 
     @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        mFragments.clear();
+    }
+
+    @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         Fragment fragment = (Fragment) object;
 
@@ -87,7 +96,6 @@ public abstract class CustomFragmentStatePagerAdapter extends PagerAdapter {
         mFragments.set(position, null);
 
         mCurTransaction.remove(fragment);
-
     }
 
     @Override
@@ -177,5 +185,18 @@ public abstract class CustomFragmentStatePagerAdapter extends PagerAdapter {
         return mFragments.get(position);
     }
 
+    public List<Fragment> getFragments() {
+        return mFragments;
+    }
 
+
+    public int getItemPosition(Object object) {
+        if (!(object instanceof Fragment))
+            throw new InvalidParameterException("Item should be a Fragment");
+
+        int index = mFragments.indexOf(object);
+
+        if (index == -1) return POSITION_NONE;
+        return index;
+    }
 }

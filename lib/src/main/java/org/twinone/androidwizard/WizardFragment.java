@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,6 +16,10 @@ import android.view.ViewGroup;
  */
 public class WizardFragment extends Fragment {
 
+    public static final int BACK = 1;
+    public static final int NEXT = 2;
+
+    private int mComesFrom = BACK;
 
     @Override
     public void onAttach(Context context) {
@@ -37,6 +42,7 @@ public class WizardFragment extends Fragment {
     protected void setCanGoNext(boolean canGoNext) {
         getWizardActivity().setCanGoNext(canGoNext);
     }
+
     protected void setCanGoBack(boolean canGoBack) {
         getWizardActivity().setCanGoBack(canGoBack);
     }
@@ -55,6 +61,18 @@ public class WizardFragment extends Fragment {
 
     protected int getTitleResId() {
         return 0;
+    }
+
+    public void setComesFrom(int from) {
+        mComesFrom = from;
+    }
+
+    public int comesFrom() {
+        return mComesFrom;
+    }
+
+    public boolean comesFrom(int from) {
+        return comesFrom() == from;
     }
 
     @Override
@@ -107,4 +125,65 @@ public class WizardFragment extends Fragment {
         return value.data;
     }
 
+    /**
+     * Called when the user navigates back (or exits) from this fragment
+     */
+    public void onNext() {
+
+    }
+
+    /**
+     * Called when the user navigates back (or exits) from this fragment
+     */
+    public void onBack() {
+
+    }
+
+
+    /**
+     * Convenience method called after both onBack() and onNext() (Similar to onPause())
+     */
+    public void onLeave() {
+    }
+
+    /**
+     * Called when this fragment has become active (Similar to onResume())
+     */
+    public void onEnter() {
+
+    }
+
+    /**
+     * Called when this fragment is navigated to from back
+     */
+    public void onEnterFromBack() {
+
+    }
+
+    /**
+     * Called when this fragment is navigated to from next
+     */
+    public void onEnterFromNext() {
+
+    }
+
+    public int getPosition() {
+        return getWizardActivity().getPosition(this);
+    }
+
+    protected void next() {
+        if (!isSelected())
+            throw new IllegalStateException("You can only call next() when this fragment isSelected()");
+        getWizardActivity().next();
+    }
+
+    protected void back() {
+        if (!isSelected())
+            throw new IllegalStateException("You can only call back() when this fragment isSelected()");
+        getWizardActivity().back();
+    }
+
+    protected boolean isSelected() {
+        return getPosition() == getWizardActivity().getSelectedPage();
+    }
 }

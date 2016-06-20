@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -16,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -42,6 +44,9 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
     private boolean mDefaultCanGoBack = true;
     private boolean mDefaultCanGoNext = false;
+
+    private int mPage = -1;
+    private boolean mCalledOnPageSelected = false;
 
     @Override
     protected void onCreate(@Nullable Bundle state) {
@@ -110,11 +115,25 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.wizardpager_bnext) {
-            selectPage(mPager.getCurrentItem() + 1);
+            next();
         }
         if (v.getId() == R.id.wizardpager_bprev) {
-            selectPage(mPager.getCurrentItem() - 1);
+            back();
         }
+    }
+
+    public void back() {
+        if (getSelectedFragment() != null) {
+            getSelectedFragment().onBack();
+        }
+        selectPage(mPager.getCurrentItem() - 1);
+    }
+
+    public void next() {
+        if (getSelectedFragment() != null) {
+            getSelectedFragment().onNext();
+        }
+        selectPage(mPager.getCurrentItem() + 1);
     }
 
     protected int getCount() {
@@ -123,10 +142,31 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
 
     protected void onPageSelected(int position) {
+        mCalledOnPageSelected = true;
+
+        boolean left = mPage < position;
+        mPage = position;
+        WizardFragment f = getSelectedFragment();
+        if (f != null) {
+            f.setComesFrom(left ? WizardFragment.BACK : WizardFragment.NEXT);
+            Log.d("OnEnter", "page=" + getSelectedPage());
+            if (f.isAdded()) {
+                f.onEnter();
+                if (f.comesFrom(WizardFragment.BACK)) f.onEnterFromBack();
+                if (f.comesFrom(WizardFragment.NEXT)) f.onEnterFromNext();
+            }
+        }
+
         updateLayout();
     }
 
-    public void selectPage(int page) {
+    public void selectPage(final int page) {
+        WizardFragment f = getSelectedFragment();
+        if (f != null) {
+            f.onLeave();
+        }
+
+        Log.d("Select", "Page=" + page);
         if (page < 0) {
             setResult(RESULT_CANCELED);
             finish();
@@ -134,12 +174,18 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         }
         if (page >= getCount()) {
             setResult(RESULT_OK);
-            finish();
             setShouldShowWizard(this, false, getIntent().getStringExtra(EXTRA_PREF_KEY));
+            finish();
             return;
         }
 
-        mPager.setCurrentItem(page);
+        // Workaround ViewPager's bug
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                mPager.setCurrentItem(page);
+            }
+        });
     }
 
     public int getSelectedPage() {
@@ -166,7 +212,9 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         WizardFragment f = getSelectedFragment();
         if (f != null) {
             mToolbar.setTitle(f.getTitle());
-            if (f.isAdded()) f.updateLayout();
+            if (f.isAdded()) {
+                f.updateLayout();
+            }
         }
     }
 
@@ -203,16 +251,32 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         mFragmentClasses.clear();
         mFragmentClasses.addAll(fragments);
 
-        mPager.getAdapter().notifyDataSetChanged();
+        onFragmentsChanged();
+    }
+
+    private void onFragmentsChanged() {
+        mAdapter.notifyDataSetChanged();
 
         if (mFragmentClasses.size() > 0) {
-            mPager.setCurrentItem(0);
+            selectPage(0);
         }
     }
 
     public void onFragmentAdded() {
+        if (!mCalledOnPageSelected) {
+            onPageSelected(getSelectedPage());
+        }
         updateLayout();
     }
+
+//    public void addPage(Class<? extends WizardFragment> fragment) {
+//        addPage(mFragmentClasses.size(), fragment);
+//    }
+//
+//    public void addPage(int location, Class<? extends WizardFragment> fragment) {
+//        mFragmentClasses.add(location, fragment);
+//        onFragmentsChanged();
+//    }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static int generateViewId() {
@@ -290,6 +354,10 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         i.putExtra(EXTRA_PREF_KEY, key);
         a.startActivityForResult(i, REQUEST_CODE);
         return true;
+    }
+
+    public int getPosition(WizardFragment f) {
+        return mAdapter.getItemPosition(f);
     }
 
 }
