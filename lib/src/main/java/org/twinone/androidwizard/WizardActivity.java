@@ -43,7 +43,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
     private CustomFragmentStatePagerAdapter mAdapter;
 
     private boolean mDefaultCanGoBack = true;
-    private boolean mDefaultCanGoNext = false;
+    private boolean mDefaultCanGoNext = true;
 
     private int mPage = -1;
     private boolean mCalledOnPageSelected = false;
