@@ -2,14 +2,14 @@ package org.twinone.androidwizard;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 /**
  * @author Luuk W. (Twinone).
@@ -51,7 +51,7 @@ public class WizardFragment extends Fragment {
     protected void setTitle(int titleResId) {
         setTitle(getString(titleResId));
     }
-    
+
     public String getTitle() {
         return mTitle;
     }
@@ -94,7 +94,9 @@ public class WizardFragment extends Fragment {
             if (!complete) return;
             // parent.removeView(v);
             v.setVisibility(View.GONE);
-            parent.addView(getCompleteButton(), index);
+            View btn = createCompleteButton();
+            parent.addView(btn, index);
+            focus(btn);
             return;
         } else {
             if (complete) return;
@@ -105,7 +107,7 @@ public class WizardFragment extends Fragment {
 
     }
 
-    protected View getCompleteButton() {
+    protected View createCompleteButton() {
         FloatingActionButton fab = new FloatingActionButton(getActivity());
         fab.setImageResource(R.drawable.ic_check_white_24dp);
         fab.setBackgroundTintList(ColorStateList.valueOf(getThemeAccentColor(getContext())));
@@ -179,4 +181,35 @@ public class WizardFragment extends Fragment {
     protected boolean isSelected() {
         return getPosition() == getWizardActivity().getSelectedPage();
     }
+
+    /**
+     * Scrolls the root view of this fragment to fully show the view
+     *
+     * @param v the View to scroll to
+     */
+    protected void focus(final View v) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (getView() instanceof ScrollView) {
+                    ((ScrollView) getView()).smoothScrollTo(0, v.getBottom());
+                } else if (getView() instanceof NestedScrollView) {
+                    ((NestedScrollView) getView()).smoothScrollTo(0, v.getBottom());
+                } else {
+                    getView().scrollTo(0, v.getBottom());
+                }
+
+            }
+        });
+    }
+
+    /**
+     * Scrolls the root view of this fragment to fully show the view
+     *
+     * @param id
+     */
+    protected void focus(final int id) {
+        focus(getView().findViewById(id));
+    }
+
 }

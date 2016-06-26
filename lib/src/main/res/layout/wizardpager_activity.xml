@@ -58,7 +58,7 @@
         android:layout_gravity="center|bottom"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:padding="16dp"
+        android:padding="8dp"
         app:layout_anchorGravity="bottom"
         app:layout_scrollFlags="scroll|enterAlways">
 

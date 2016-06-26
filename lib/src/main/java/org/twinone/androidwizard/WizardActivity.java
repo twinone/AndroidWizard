@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -89,19 +88,16 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         mToolbar = (CollapsingToolbarLayout) findViewById(R.id.wizardpager_collapsing_toolbar);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
-        collapseAppBarIfSmall();
-
-
         setPagingEnabled(false);
         setCanGoNext(false);
     }
 
-    private void collapseAppBarIfSmall() {
+    public void collapseActionBarIfNeeded() {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         float h = dm.heightPixels / dm.density;
-        boolean land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        // Collapse if in landscape and bigger than 600dp height
-        if (land && h < 600) {
+        //boolean land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        // Collapse if bigger than 600dp height
+        if (h < 600) {
             mAppBarLayout.setExpanded(false, false);
         }
     }
@@ -142,6 +138,8 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
 
     protected void onPageSelected(int position) {
+        collapseActionBarIfNeeded();
+
         mCalledOnPageSelected = true;
 
         boolean left = mPage < position;
@@ -363,5 +361,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
     public int getPosition(WizardFragment f) {
         return mAdapter.getItemPosition(f);
     }
+
+
 
 }
