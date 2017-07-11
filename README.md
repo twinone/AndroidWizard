@@ -43,9 +43,58 @@ dependencies {
 
 # Usage
 
-TODO, but basically extend WizardActivity and launch it
+Just extend WizardActivity
+
+```java
+public class MyWizardActivity extends WizardActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle state) {
+        super.onCreate(state);
+        
+        // The WelcomeWizardScreen shows a line, your icon and
+        // another line. This should be the first screen in most apps
+        WelcomeWizardFragment.newInstance(
+                "Android Wizard",
+                "Welcome to Android Wizard Demo application",
+                "Tap next to continue",
+                R.mipmap.ic_launcher
+        ).addTo(this);
+        
+        // A TextWizardFragment is a very simple information screen
+        TextWizardFragment.newInstance(
+                "Another screen", "This is a very useful string"
+        ).addTo(this);
+        
+        TextWizardFragment.newInstance(
+                "Almost done", "Yet another screen"
+        ).addTo(this);
+    }
+}
+```
+
+... and launch it from your MainActivity:
+
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  ...
+  // show the welcome screen only once
+  WizardActivity.show(this, MyWizardActivity.class);
 
 
+  findViewById(R.id.button).setOnClickListener((v) -> {
+    // force to show it always, useful for a "Tutorial" button
+    WizardActivity.show(this, MyWizardActivity.class, true);
+  });
+}
+```
+
+This will show you the following welcome screen:
+
+<img src="https://user-images.githubusercontent.com/4309591/28090846-093c4466-668e-11e7-8180-ab7a65611018.jpg" height="450">
 
 
+# Requesting permissions
 
+TODO
