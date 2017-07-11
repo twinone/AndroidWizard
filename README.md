@@ -43,8 +43,36 @@ dependencies {
 
 # Usage
 
-TODO, but basically extend WizardActivity and launch it
+Just create a WizardActivity and launch it.
 
+MyWizardActivity.java
+```
+public class MyWizardActivity extends WizardActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle state) {
+        super.onCreate(state);
+        
+        // The WelcomeWizardScreen shows a line, your icon and
+        // another line. This should be the first screen in most apps
+        WelcomeWizardFragment.newInstance(
+                "Android Wizard",
+                "Welcome to Android Wizard Demo application",
+                "Tap next to continue",
+                R.mipmap.ic_launcher
+        ).addTo(this);
+        
+        // A TextWizardFragment is a very simple information screen
+        TextWizardFragment.newInstance(
+                "Another screen", "This is a very useful string"
+        ).addTo(this);
+        
+        TextWizardFragment.newInstance(
+                "Almost done", "Yet another screen"
+        ).addTo(this);
+    }
+}
+```
 
 
 
