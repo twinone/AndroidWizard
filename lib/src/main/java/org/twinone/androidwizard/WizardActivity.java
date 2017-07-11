@@ -38,7 +38,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
     private CustomViewPager mPager;
     private AppBarLayout mAppBarLayout;
     private CollapsingToolbarLayout mToolbar;
-    private final List<Class<? extends WizardFragment>> mFragmentClasses = new ArrayList<>();
+    private final List<WizardFragment> mFragments = new ArrayList<>();
     private CustomFragmentStatePagerAdapter mAdapter;
 
     private boolean mDefaultCanGoBack = true;
@@ -61,7 +61,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
             @Override
             public Fragment getItem(int position) {
                 try {
-                    return mFragmentClasses.get(position).newInstance();
+                    return mFragments.get(position);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -69,7 +69,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
             @Override
             public int getCount() {
-                return mFragmentClasses.size();
+                return mFragments.size();
             }
         };
 
@@ -133,7 +133,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
     }
 
     protected int getCount() {
-        return mFragmentClasses.size();
+        return mFragments.size();
     }
 
 
@@ -245,9 +245,9 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         return mToolbar;
     }
 
-    protected void setFragments(List<Class<? extends WizardFragment>> fragments) {
-        mFragmentClasses.clear();
-        mFragmentClasses.addAll(fragments);
+    protected void setFragments(List<WizardFragment> fragments) {
+        mFragments.clear();
+        mFragments.addAll(fragments);
 
         onFragmentsChanged();
     }
@@ -255,7 +255,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
     private void onFragmentsChanged() {
         mAdapter.notifyDataSetChanged();
 
-        if (mFragmentClasses.size() > 0) {
+        if (mFragments.size() > 0) {
             selectPage(0);
         }
     }
@@ -268,11 +268,11 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
     }
 
 //    public void addPage(Class<? extends WizardFragment> fragment) {
-//        addPage(mFragmentClasses.size(), fragment);
+//        addPage(mFragments.size(), fragment);
 //    }
 //
 //    public void addPage(int location, Class<? extends WizardFragment> fragment) {
-//        mFragmentClasses.add(location, fragment);
+//        mFragments.add(location, fragment);
 //        onFragmentsChanged();
 //    }
 
@@ -350,6 +350,10 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         return show(a, wizard, DEFAULT_KEY, false);
     }
 
+    public static boolean show(Activity a, Class<? extends WizardActivity> wizard, boolean force) {
+        return show(a, wizard, DEFAULT_KEY, force);
+    }
+
     public static boolean show(Activity a, Class<? extends WizardActivity> wizard, String key, boolean force) {
         if (!shouldShowWizard(a, key) && !force) return false;
         Intent i = new Intent(a, wizard);
@@ -363,5 +367,22 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
     }
 
 
+    public List<WizardFragment> getFragments() {
+        return mFragments;
+    }
+
+    public void addFragment(Class<? extends WizardFragment> fragmentClass) {
+        try {
+            mFragments.add(fragmentClass.newInstance());
+        } catch (Exception e) {
+            Log.e("WizardActivity", "Your classes must be instantiable with a default constructor", e);
+        }
+        onFragmentsChanged();
+    }
+
+    public void addFragment(WizardFragment fragment) {
+        mFragments.add(fragment);
+        onFragmentsChanged();
+    }
 
 }

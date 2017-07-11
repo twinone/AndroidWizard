@@ -2,11 +2,14 @@ package org.twinone.androidwizard;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
@@ -14,7 +17,7 @@ import android.widget.ScrollView;
 /**
  * @author Luuk W. (Twinone).
  */
-public class WizardFragment extends Fragment {
+public abstract class WizardFragment extends Fragment {
 
     public static final int BACK = 1;
     public static final int NEXT = 2;
@@ -73,6 +76,14 @@ public class WizardFragment extends Fragment {
         super.onResume();
         getWizardActivity().onFragmentAdded();
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return setup(inflater, container, savedInstanceState);
+    }
+
+
 
     /**
      * Called when onResume is called, when this fragment is navigated to, and at startup<br>
@@ -211,5 +222,16 @@ public class WizardFragment extends Fragment {
     protected void focus(final int id) {
         focus(getView().findViewById(id));
     }
+
+
+
+    protected abstract View setup(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+
+
+    public WizardFragment addTo(WizardActivity a) {
+        a.addFragment(this);
+        return this;
+    }
+
 
 }
