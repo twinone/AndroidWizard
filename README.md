@@ -81,9 +81,12 @@ protected void onCreate(Bundle savedInstanceState) {
   ...
   // show the welcome screen only once
   WizardActivity.show(this, MyWizardActivity.class);
-  
-  // force to show it always, useful for a "Tutorial" button
-  WizardActivity.show(this, MyWizardActivity.class, true);
+
+
+  findViewById(R.id.button).setOnClickListener((v) -> {
+    // force to show it always, useful for a "Tutorial" button
+    WizardActivity.show(this, MyWizardActivity.class, true);
+  });
 }
 ```
 
