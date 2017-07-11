@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">AndroidWizard</string>
+    <string name="app_name">Android Wizard</string>
+    <string name="b_tutorial">Launch tutorial</string>
 </resources>
