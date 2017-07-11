@@ -43,10 +43,9 @@ dependencies {
 
 # Usage
 
-Just create a WizardActivity and launch it.
+Just extend WizardActivity
 
-MyWizardActivity.java
-```
+```java
 public class MyWizardActivity extends WizardActivity {
 
     @Override
@@ -71,6 +70,20 @@ public class MyWizardActivity extends WizardActivity {
                 "Almost done", "Yet another screen"
         ).addTo(this);
     }
+}
+```
+
+... and launch it from your MainActivity:
+
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  ...
+  // show the welcome screen only once
+  WizardActivity.show(this, MyWizardActivity.class);
+  
+  // force to show it always, useful for a "Tutorial" button
+  WizardActivity.show(this, MyWizardActivity.class, true);
 }
 ```
 
