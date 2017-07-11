@@ -90,6 +90,11 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ```
 
+This will show you the following welcome screen:
+
+<img src="https://user-images.githubusercontent.com/4309591/28090846-093c4466-668e-11e7-8180-ab7a65611018.jpg" height="450">
 
 
+# Requesting permissions
 
+TODO
