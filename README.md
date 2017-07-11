@@ -1,3 +1,6 @@
+[![](https://jitpack.io/v/twinone/AndroidWizard.svg)](https://jitpack.io/#twinone/AndroidWizard)
+
+
 # AndroidWizard
 Simple to use welcome screen for your Android app.
 
@@ -34,7 +37,7 @@ allprojects {
 In your **app's build.gradle**, add the dependency:
 ```
 dependencies {
-  compile 'com.github.twinone:AndroidWizard:-452c168d97-1'
+  compile 'com.github.twinone:AndroidWizard:452c168d97'
 }
 ```
 
