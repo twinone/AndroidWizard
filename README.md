@@ -37,7 +37,7 @@ allprojects {
 In your **app's build.gradle**, add the dependency:
 ```
 dependencies {
-  compile 'com.github.twinone:AndroidWizard:452c168d97'
+  compile 'com.github.twinone:AndroidWizard:b4546bd712'
 }
 ```
 
