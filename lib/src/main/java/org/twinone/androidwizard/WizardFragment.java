@@ -84,7 +84,6 @@ public abstract class WizardFragment extends Fragment {
     }
 
 
-
     /**
      * Called when onResume is called, when this fragment is navigated to, and at startup<br>
      * Override this to update the navigation buttons, and any state in your view
@@ -224,12 +223,46 @@ public abstract class WizardFragment extends Fragment {
     }
 
 
-
     protected abstract View setup(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
 
     public WizardFragment addTo(WizardActivity a) {
         a.addFragment(this);
+        return this;
+    }
+
+    public WizardFragment addString(String key, String value) {
+        Bundle args = getArguments();
+        args.putString(key, value);
+        setArguments(args);
+        return this;
+    }
+
+    public WizardFragment addInt(String key, int value) {
+        Bundle args = getArguments();
+        args.putInt(key, value);
+        setArguments(args);
+        return this;
+    }
+
+    public WizardFragment addLong(String key, long value) {
+        Bundle args = getArguments();
+        args.putLong(key, value);
+        setArguments(args);
+        return this;
+    }
+
+    public WizardFragment addFloat(String key, float value) {
+        Bundle args = getArguments();
+        args.putFloat(key, value);
+        setArguments(args);
+        return this;
+    }
+
+    public WizardFragment addDouble(String key, double value) {
+        Bundle args = getArguments();
+        args.putDouble(key, value);
+        setArguments(args);
         return this;
     }
 

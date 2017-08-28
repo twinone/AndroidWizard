@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Android Wizard</string>
+    <string name="wizard_tit_perms">Permissions</string>
+    <string name="b_grant">Grant</string>
 </resources>

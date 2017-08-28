@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
     public static final int REQUEST_CODE = 0x93F9;
     public static final String EXTRA_PREF_KEY = "org.twinone.wizardpager.extra.pref_key";
-    private static final String DEFAULT_KEY = "org.twinone.wizardpager.pref.should_show";
+    public static final String DEFAULT_KEY = "org.twinone.wizardpager.pref.should_show";
 
     private FloatingActionButton mPrev;
     private FloatingActionButton mNext;
@@ -86,6 +87,16 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         mNext.setOnClickListener(this);
         mProgress = (DottedProgressView) findViewById(R.id.wizardpager_progress);
         mToolbar = (CollapsingToolbarLayout) findViewById(R.id.wizardpager_collapsing_toolbar);
+
+
+        // Android is awesome yay!
+        // https://stackoverflow.com/a/43676163
+        mToolbar.post(new Runnable() {
+            @Override
+            public void run() {
+                mToolbar.requestLayout();
+            }
+        });
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
         setPagingEnabled(false);
@@ -110,12 +121,16 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onClick(View v) {
+
         if (v.getId() == R.id.wizardpager_bnext) {
             next();
         }
         if (v.getId() == R.id.wizardpager_bprev) {
             back();
         }
+
+        mPager.requestFocus();
+
     }
 
     public void back() {
