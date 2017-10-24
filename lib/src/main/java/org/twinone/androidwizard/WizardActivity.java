@@ -159,6 +159,11 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
         boolean left = mPage < position;
         mPage = position;
+        
+        // updateLayout before to prevent overwriting changes in the page itself
+        // like setCanGoNext(false) in onEnter() or so
+        updateLayout();
+        
         WizardFragment f = getSelectedFragment();
         if (f != null) {
             f.setComesFrom(left ? WizardFragment.BACK : WizardFragment.NEXT);
@@ -169,8 +174,6 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
                 if (f.comesFrom(WizardFragment.NEXT)) f.onEnterFromNext();
             }
         }
-
-        updateLayout();
     }
 
     public void selectPage(final int page) {
