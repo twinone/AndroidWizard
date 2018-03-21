@@ -18,9 +18,11 @@ public class DottedProgressView extends View {
     private int mCount;
     private int mCurrent = 1;
     private boolean mShowDots = true;
+    private boolean mShowLines = true;
 
     private Paint mCompletedPaint = new Paint();
     private Paint mLeftPaint = new Paint();
+    private int radius;
 
     public DottedProgressView(Context context) {
         this(context, null);
@@ -91,6 +93,10 @@ public class DottedProgressView extends View {
         mShowDots = showDots;
     }
 
+    public void setShowLines(boolean showLines) {
+        this.mShowLines = showLines;
+    }
+
     public void setCompletedColor(int color) {
         mCompletedPaint.setColor(color);
         invalidate();
@@ -119,15 +125,21 @@ public class DottedProgressView extends View {
         int w = getWidth();
         int h = getHeight();
         int r = h / 2;
+
+        if (radius != 0) {
+            r = radius;
+        }
+
         if (mShowDots) {
             int step = (int) ((float) (w - 2 * r) / (mCount - 1));
 
             int split = r + mCurrent * step - step / 2;
             split = Math.min(Math.max(r, split), w - r);
 
-            canvas.drawLine(r, r, split, r, mCompletedPaint);
-            canvas.drawLine(split, r, w - r, r, mLeftPaint);
-
+            if (mShowLines) {
+                canvas.drawLine(r, r, split, r, mCompletedPaint);
+                canvas.drawLine(split, r, w - r, r, mLeftPaint);
+            }
             for (int i = 0; i < mCount; i++) {
                 canvas.drawCircle(r + step * i, r, r, i < mCurrent ? mCompletedPaint : mLeftPaint);
             }
@@ -135,9 +147,10 @@ public class DottedProgressView extends View {
             int step = (int) (w / (float) (mCount));
             int split = step * mCurrent;
             split = Math.min(Math.max(0, split), w);
-
-            canvas.drawLine(0, r, split, r, mCompletedPaint);
-            canvas.drawLine(split, r, w, r, mLeftPaint);
+            if (mShowLines) {
+                canvas.drawLine(0, r, split, r, mCompletedPaint);
+                canvas.drawLine(split, r, w, r, mLeftPaint);
+            }
         }
     }
 
@@ -177,5 +190,9 @@ public class DottedProgressView extends View {
 
     public int dpToPx(int dp) {
         return Math.round(dp * (getContext().getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    public void setRadius(int r) {
+        radius = dpToPx(r);
     }
 }

@@ -19,6 +19,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,11 +160,11 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
         boolean left = mPage < position;
         mPage = position;
-        
+
         // updateLayout before to prevent overwriting changes in the page itself
         // like setCanGoNext(false) in onEnter() or so
         updateLayout();
-        
+
         WizardFragment f = getSelectedFragment();
         if (f != null) {
             f.setComesFrom(left ? WizardFragment.BACK : WizardFragment.NEXT);
@@ -329,6 +330,10 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         mProgress.setShowDots(showDots);
     }
 
+    public void setShowLines(boolean show) {
+        mProgress.setShowLines(show);
+    }
+
     /**
      * Shows the wizard if needed<br>
      * Usage example:
@@ -403,4 +408,18 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         onFragmentsChanged();
     }
 
+    public void setProgressPadding(int padding) {
+        int p = dpToPx(padding);
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mProgress.getLayoutParams();
+        lp.setMargins(p, 0, p, 0);
+        mProgress.setLayoutParams(lp);
+    }
+
+    public void setProgressDotsRadius(int r) {
+        mProgress.setRadius(r);
+    }
+
+    public int dpToPx(int dp) {
+        return Math.round(dp * (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
 }

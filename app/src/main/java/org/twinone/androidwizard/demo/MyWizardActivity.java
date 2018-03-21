@@ -23,6 +23,10 @@ public class MyWizardActivity extends WizardActivity {
     protected void onCreate(@Nullable Bundle state) {
         super.onCreate(state);
 
+        setShowLines(false);
+        setProgressPadding(100); //dp
+        setProgressDotsRadius(5); //dp
+
         WelcomeWizardFragment.newInstance(
                 "Android Wizard",
                 "Welcome to Android Wizard Demo application",
