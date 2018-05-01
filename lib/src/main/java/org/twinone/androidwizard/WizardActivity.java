@@ -11,14 +11,16 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
     public static final int REQUEST_CODE = 0x93F9;
     public static final String EXTRA_PREF_KEY = "org.twinone.wizardpager.extra.pref_key";
     public static final String DEFAULT_KEY = "org.twinone.wizardpager.pref.should_show";
+    private static final String TAG = "WizardActivity";
 
     private FloatingActionButton mPrev;
     private FloatingActionButton mNext;
@@ -103,6 +106,11 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         setPagingEnabled(false);
         setCanGoNext(false);
     }
+
+    protected AppBarLayout getAppBarLayout() {
+        return mAppBarLayout;
+    }
+
 
     public void collapseActionBarIfNeeded() {
         DisplayMetrics dm = getResources().getDisplayMetrics();

@@ -22,7 +22,6 @@ public class MyWizardActivity extends WizardActivity {
     @Override
     protected void onCreate(@Nullable Bundle state) {
         super.onCreate(state);
-
         setShowLines(false);
         setProgressPadding(100); //dp
         setProgressDotsRadius(5); //dp
