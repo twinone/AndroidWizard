@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidWizard.iml" filepath="$PROJECT_DIR$/AndroidWizard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/AndroidWizard-app.iml" filepath="$PROJECT_DIR$/app/AndroidWizard-app.iml" group="AndroidWizard/app" />
+      <module fileurl="file://$PROJECT_DIR$/lib/AndroidWizard-lib.iml" filepath="$PROJECT_DIR$/lib/AndroidWizard-lib.iml" group="AndroidWizard/lib" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dev-AndroidWizard.iml" filepath="$PROJECT_DIR$/dev-AndroidWizard.iml" group="AndroidWizard" />
       <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
     </modules>
   </component>

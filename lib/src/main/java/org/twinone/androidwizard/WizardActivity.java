@@ -1,5 +1,6 @@
 package org.twinone.androidwizard;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -8,17 +9,21 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.Nullable;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +61,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
         setContentView(R.layout.wizardpager_activity);
 
-
-        mPager = (CustomViewPager) findViewById(R.id.wizardpager_pager);
+        mPager = (CustomViewPager) ((Activity) this).findViewById(R.id.wizardpager_pager);
         mAdapter = new CustomFragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -81,12 +85,12 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
                 WizardActivity.this.onPageSelected(position);
             }
         });
-        mPrev = (FloatingActionButton) findViewById(R.id.wizardpager_bprev);
+        mPrev = (FloatingActionButton) ((Activity) this).findViewById(R.id.wizardpager_bprev);
         mPrev.setOnClickListener(this);
-        mNext = (FloatingActionButton) findViewById(R.id.wizardpager_bnext);
+        mNext = (FloatingActionButton) ((Activity) this).findViewById(R.id.wizardpager_bnext);
         mNext.setOnClickListener(this);
-        mProgress = (DottedProgressView) findViewById(R.id.wizardpager_progress);
-        mToolbar = (CollapsingToolbarLayout) findViewById(R.id.wizardpager_collapsing_toolbar);
+        mProgress = (DottedProgressView) ((Activity) this).findViewById(R.id.wizardpager_progress);
+        mToolbar = (CollapsingToolbarLayout) ((Activity) this).findViewById(R.id.wizardpager_collapsing_toolbar);
 
 
         // Android is awesome yay!
@@ -97,7 +101,7 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
                 mToolbar.requestLayout();
             }
         });
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        mAppBarLayout = (AppBarLayout) ((Activity) this).findViewById(R.id.appbar);
 
         setPagingEnabled(false);
         setCanGoNext(false);
@@ -159,11 +163,11 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
 
         boolean left = mPage < position;
         mPage = position;
-        
+
         // updateLayout before to prevent overwriting changes in the page itself
         // like setCanGoNext(false) in onEnter() or so
         updateLayout();
-        
+
         WizardFragment f = getSelectedFragment();
         if (f != null) {
             f.setComesFrom(left ? WizardFragment.BACK : WizardFragment.NEXT);
@@ -246,11 +250,13 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
         return (WizardFragment) mAdapter.getFragment(getSelectedPage());
     }
 
+    @SuppressLint("RestrictedApi")
     public void setCanGoBack(boolean canGoBack) {
         mPrev.setVisibility(canGoBack ? View.VISIBLE : View.INVISIBLE);
 
     }
 
+    @SuppressLint("RestrictedApi")
     public void setCanGoNext(boolean canGoNext) {
         mNext.setVisibility(canGoNext ? View.VISIBLE : View.INVISIBLE);
     }
@@ -364,15 +370,15 @@ public abstract class WizardActivity extends AppCompatActivity implements View.O
      * @param wizard The class of your WizardActivity extension
      * @return true if the wizard has been shown
      */
-    public static boolean show(Activity a, Class<? extends WizardActivity> wizard) {
+    public static boolean show(AppCompatActivity a, Class<? extends WizardActivity> wizard) {
         return show(a, wizard, DEFAULT_KEY, false);
     }
 
-    public static boolean show(Activity a, Class<? extends WizardActivity> wizard, boolean force) {
+    public static boolean show(AppCompatActivity a, Class<? extends WizardActivity> wizard, boolean force) {
         return show(a, wizard, DEFAULT_KEY, force);
     }
 
-    public static boolean show(Activity a, Class<? extends WizardActivity> wizard, String key, boolean force) {
+    public static boolean show(AppCompatActivity a, Class<? extends WizardActivity> wizard, String key, boolean force) {
         if (!shouldShowWizard(a, key) && !force) return false;
         Intent i = new Intent(a, wizard);
         i.putExtra(EXTRA_PREF_KEY, key);

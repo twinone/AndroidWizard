@@ -4,10 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import androidx.viewpager.widget.ViewPager;
+
 /**
  * @author Luuk W. (Twinone).
  */
-public class CustomViewPager extends android.support.v4.view.ViewPager {
+public class CustomViewPager extends ViewPager {
 
     private boolean pagingEnabled = true;
 
